@@ -6,6 +6,8 @@ Homebrew formulae for [Breaktrough](https://breaktroughf1.com) tools.
 brew install breaktroughf1/tap/lockward
 ```
 
+With Homebrew 6 or later, installing by this fully qualified name trusts only the `lockward` formula, not the whole tap ([tap trust](https://docs.brew.sh/Tap-Trust)); no other step is needed. If you tap the repository first, trust just this formula with `brew trust --formula breaktroughf1/tap/lockward`.
+
 | Formula | Description |
 |---|---|
 | [`lockward`](https://github.com/Breaktroughf1/lockward) | Lockfile and policy gate for AI agent skills, MCP servers, hooks and rules |
