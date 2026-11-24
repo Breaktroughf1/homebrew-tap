@@ -60,7 +60,7 @@ jobs:
           brew tap breaktroughf1/tap "$GITHUB_WORKSPACE"
           # Homebrew 6+ requires trust for non-official taps (docs.brew.sh/Tap-Trust).
           # Trust only this formula, never the whole tap.
-          if brew commands | grep -qx trust; then brew trust --formula breaktroughf1/tap/lockward; fi
+          if brew trust --help >/dev/null 2>&1; then brew trust --formula breaktroughf1/tap/lockward; fi
           brew audit --strict breaktroughf1/tap/lockward
           brew install breaktroughf1/tap/lockward
           brew test breaktroughf1/tap/lockward
