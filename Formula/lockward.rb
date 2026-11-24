@@ -10,23 +10,23 @@ class Lockward < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.0/lockward_0.2.0_darwin_arm64.tar.gz"
-      sha256 "bf3a27f73e788d9353f7f8d2c1e0af9c040c3ad84983b56cde716ca2d987a2a0"
+      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.1/lockward_0.2.1_darwin_arm64.tar.gz"
+      sha256 "3fcd5825f78ae1e557499444ab69a23fdca83fd55c17653ed58c2ff3d0776b7c"
     end
     on_intel do
-      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.0/lockward_0.2.0_darwin_amd64.tar.gz"
-      sha256 "caa2ae102cd2b00248978b33742150e6397f073eae89527ef19b4b4aafb09469"
+      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.1/lockward_0.2.1_darwin_amd64.tar.gz"
+      sha256 "f488a42d5c69b69a99b462b2684143f79e8f71c8cd3d92ac8af8b6de89b8dbdb"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.0/lockward_0.2.0_linux_arm64.tar.gz"
-      sha256 "e0f472b21d22862eda7d9cfc521203bf1a3b8e64719d5f830ff1b060d2b47fb2"
+      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.1/lockward_0.2.1_linux_arm64.tar.gz"
+      sha256 "f4e087ea796040700c7e435c01b9c0e89c9a080821a50846aeb8fece3805b1f8"
     end
     on_intel do
-      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.0/lockward_0.2.0_linux_amd64.tar.gz"
-      sha256 "9a8277b5ba6efe84bf1c9cc020153a82f3835e6aba1fdf211419519d6544036a"
+      url "https://github.com/Breaktroughf1/lockward/releases/download/v0.2.1/lockward_0.2.1_linux_amd64.tar.gz"
+      sha256 "e61bca14b9cc425ae58bb55ae085bf113074d3ed9b02472b20c98b7be8435b66"
     end
   end
 
