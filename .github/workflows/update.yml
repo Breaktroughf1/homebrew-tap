@@ -1,0 +1,65 @@
+name: update
+
+# Keeps Formula/lockward.rb in step with Lockward releases. The formula is
+# regenerated from the release's Sigstore-verified checksums, installed and
+# tested with Homebrew, and only then committed. No secrets are used: the job
+# pushes to this repository with its own short-lived GITHUB_TOKEN.
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to package (default the latest, e.g. v0.2.0)
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-formula
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
+      - name: Regenerate the formula (verifies the release signature)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: bin/update-formula.sh "$TAG"
+      - name: Stop if nothing changed
+        id: diff
+        run: |
+          if git diff --quiet -- Formula; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Formula already up to date."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff -- Formula
+          fi
+      - name: Commit locally
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          version="$(sed -n 's|.*releases/download/v\([0-9.]*\)/.*|\1|p' Formula/lockward.rb | head -1)"
+          git add Formula/lockward.rb
+          git commit -m "lockward ${version}"
+      - name: Install and test with Homebrew before publishing
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew tap breaktroughf1/tap "$GITHUB_WORKSPACE"
+          brew audit --strict breaktroughf1/tap/lockward
+          brew install breaktroughf1/tap/lockward
+          brew test breaktroughf1/tap/lockward
+      - name: Publish
+        if: steps.diff.outputs.changed == 'true'
+        run: git push origin HEAD:main

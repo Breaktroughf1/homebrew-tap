@@ -1,0 +1,50 @@
+name: test
+
+# Installs the formula from this tap on macOS and Linux, Intel and ARM, and
+# runs its test. Commits made by the update workflow do not trigger workflows,
+# so this also runs weekly and on demand.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "41 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  brew:
+    name: brew install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-15-intel, ubuntu-latest, ubuntu-24.04-arm]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Skip until the formula exists
+        id: f
+        shell: bash
+        run: |
+          if [ -f Formula/lockward.rb ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Put Homebrew on PATH
+        if: steps.f.outputs.present == 'true'
+        shell: bash
+        run: |
+          for b in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do
+            if [ -x "$b" ]; then dirname "$b" >> "$GITHUB_PATH"; break; fi
+          done
+      - name: Audit, install and test
+        if: steps.f.outputs.present == 'true'
+        shell: bash
+        run: |
+          brew tap breaktroughf1/tap "$GITHUB_WORKSPACE"
+          brew audit --strict breaktroughf1/tap/lockward
+          brew install breaktroughf1/tap/lockward
+          brew test breaktroughf1/tap/lockward
+          lockward version
