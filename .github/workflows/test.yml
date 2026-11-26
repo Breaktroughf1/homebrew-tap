@@ -1,6 +1,6 @@
 name: test
 
-# Installs the formula from this tap on macOS and Linux, Intel and ARM, and
+# Installs each formula from this tap on macOS and Linux, Intel and ARM, and
 # runs its test. Commits made by the update workflow do not trigger workflows,
 # so this also runs weekly and on demand.
 
@@ -17,12 +17,13 @@ permissions:
 
 jobs:
   brew:
-    name: brew install (${{ matrix.os }})
+    name: brew install ${{ matrix.formula }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, macos-15-intel, ubuntu-latest, ubuntu-24.04-arm]
+        formula: [lockward, wardmap]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,8 +31,10 @@ jobs:
       - name: Skip until the formula exists
         id: f
         shell: bash
+        env:
+          FORMULA: ${{ matrix.formula }}
         run: |
-          if [ -f Formula/lockward.rb ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -f "Formula/$FORMULA.rb" ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
       - name: Put Homebrew on PATH
         if: steps.f.outputs.present == 'true'
         shell: bash
@@ -42,12 +45,14 @@ jobs:
       - name: Audit, install and test
         if: steps.f.outputs.present == 'true'
         shell: bash
+        env:
+          FORMULA: ${{ matrix.formula }}
         run: |
           brew tap breaktroughf1/tap "$GITHUB_WORKSPACE"
           # Homebrew 6+ requires trust for non-official taps (docs.brew.sh/Tap-Trust).
           # Trust only this formula, never the whole tap.
-          if brew trust --help >/dev/null 2>&1; then brew trust --formula breaktroughf1/tap/lockward; fi
-          brew audit --strict breaktroughf1/tap/lockward
-          brew install breaktroughf1/tap/lockward
-          brew test breaktroughf1/tap/lockward
-          lockward version
+          if brew trust --help >/dev/null 2>&1; then brew trust --formula "breaktroughf1/tap/$FORMULA"; fi
+          brew audit --strict "breaktroughf1/tap/$FORMULA"
+          brew install "breaktroughf1/tap/$FORMULA"
+          brew test "breaktroughf1/tap/$FORMULA"
+          "$FORMULA" version
