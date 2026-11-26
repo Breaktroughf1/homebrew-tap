@@ -5,6 +5,7 @@ Homebrew formulae for [Breaktrough](https://breaktroughf1.com) tools.
 ```sh
 brew install breaktroughf1/tap/lockward
 brew install breaktroughf1/tap/wardmap
+brew install breaktroughf1/tap/dpdpward
 ```
 
 With Homebrew 6 or later, installing by the fully qualified name trusts only that formula, not the whole tap ([tap trust](https://docs.brew.sh/Tap-Trust)); no other step is needed. If you tap the repository first, trust just the formula you want, for example `brew trust --formula breaktroughf1/tap/wardmap`.
@@ -13,6 +14,7 @@ With Homebrew 6 or later, installing by the fully qualified name trusts only tha
 |---|---|
 | [`lockward`](https://github.com/Breaktroughf1/lockward) | Lockfile and policy gate for AI agent skills, MCP servers, hooks and rules |
 | [`wardmap`](https://github.com/Breaktroughf1/wardmap) | Map which secrets and cloud roles one compromised CI credential can reach |
+| [`dpdpward`](https://github.com/Breaktroughf1/dpdpward) | Map personal data in code for India's DPDP Act: data map, ROPA, safeguards |
 
 ## How the formula is updated
 

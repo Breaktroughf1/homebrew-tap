@@ -8,7 +8,7 @@
 # credential or secret is involved.
 #
 # Usage: bin/update-formula.sh <formula> [vX.Y.Z]   (default: the latest release)
-#        formula: lockward | wardmap
+#        formula: lockward | wardmap | dpdpward
 # Needs: gh (authenticated via GH_TOKEN for API rate limits), curl, cosign.
 #
 # Exit codes: 0 formula written (or release not yet signed: skipped with a
@@ -33,8 +33,15 @@ formula_config() {
       test_body='    assert_match "wardmap v#{version}", shell_output("#{bin}/wardmap version")
     assert_match "WM001", shell_output("#{bin}/wardmap rules")'
       ;;
+    dpdpward)
+      repo="Breaktroughf1/dpdpward"
+      class="Dpdpward"
+      desc="Map personal data in code for India's DPDP Act: data map, ROPA, safeguards"
+      test_body='    assert_match "dpdpward v#{version}", shell_output("#{bin}/dpdpward version")
+    assert_match "DP001", shell_output("#{bin}/dpdpward rules")'
+      ;;
     *)
-      echo "error: unknown formula '$1' (want lockward or wardmap)" >&2
+      echo "error: unknown formula '$1' (want lockward, wardmap or dpdpward)" >&2
       return 1
       ;;
   esac
@@ -103,7 +110,17 @@ main() {
   formula_config "$name"
   local formula="Formula/${name}.rb"
   if [[ -z "$tag" ]]; then
-    tag="$(gh api "repos/${repo}/releases/latest" --jq .tag_name)"
+    local latest
+    if ! latest="$(gh api "repos/${repo}/releases/latest" --jq .tag_name 2>&1)"; then
+      # No release published yet: nothing to package. Any other error fails.
+      if grep -q "HTTP 404" <<<"$latest"; then
+        echo "::notice::${name} has no published release yet; skipping, formula unchanged."
+        return 0
+      fi
+      echo "error: looking up the latest ${name} release: ${latest}" >&2
+      return 1
+    fi
+    tag="$latest"
   fi
   if ! [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "error: refusing unexpected tag '$tag' (want vX.Y.Z, no pre-releases)" >&2
