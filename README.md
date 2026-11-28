@@ -6,6 +6,11 @@ Homebrew formulae for [Breaktrough](https://breaktroughf1.com) tools.
 brew install breaktroughf1/tap/lockward
 brew install breaktroughf1/tap/wardmap
 brew install breaktroughf1/tap/dpdpward
+brew install breaktroughf1/tap/peerward
+brew install breaktroughf1/tap/appward
+brew install breaktroughf1/tap/niyam
+brew install breaktroughf1/tap/lineward
+brew install breaktroughf1/tap/pramaan
 ```
 
 With Homebrew 6 or later, installing by the fully qualified name trusts only that formula, not the whole tap ([tap trust](https://docs.brew.sh/Tap-Trust)); no other step is needed. If you tap the repository first, trust just the formula you want, for example `brew trust --formula breaktroughf1/tap/wardmap`.
@@ -15,6 +20,11 @@ With Homebrew 6 or later, installing by the fully qualified name trusts only tha
 | [`lockward`](https://github.com/Breaktroughf1/lockward) | Lockfile and policy gate for AI agent skills, MCP servers, hooks and rules |
 | [`wardmap`](https://github.com/Breaktroughf1/wardmap) | Map which secrets and cloud roles one compromised CI credential can reach |
 | [`dpdpward`](https://github.com/Breaktroughf1/dpdpward) | Map personal data in code for India's DPDP Act: data map, ROPA, safeguards |
+| [`peerward`](https://github.com/Breaktroughf1/peerward) | Sign, verify, audit and pin A2A Agent Cards; fail CI when a peer drifts |
+| [`appward`](https://github.com/Breaktroughf1/appward) | Find keys and backends shipped in web, Android and iOS apps and their reach |
+| [`niyam`](https://github.com/Breaktroughf1/niyam) | CERT-In and SEBI CSCRF evidence scanner for cloud, hosts and repositories |
+| [`lineward`](https://github.com/Breaktroughf1/lineward) | Find AI-assisted lines in a pull request and enforce human review on them |
+| [`pramaan`](https://github.com/Breaktroughf1/pramaan) | Second-factor verifier for Indian payment apps: attested device binding |
 
 ## How the formula is updated
 

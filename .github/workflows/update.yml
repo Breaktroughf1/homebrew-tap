@@ -15,7 +15,7 @@ on:
         description: Formula to update (default all)
         required: false
         type: choice
-        options: [all, lockward, wardmap, dpdpward]
+        options: [all, lockward, wardmap, dpdpward, peerward, appward, niyam, lineward, pramaan]
         default: all
       tag:
         description: Release tag to package (default the latest; only with a single formula)
@@ -45,7 +45,7 @@ jobs:
           set -euo pipefail
           if [ "$FORMULA" = all ]; then
             if [ -n "$TAG" ]; then echo "::error::a tag needs a single formula"; exit 1; fi
-            formulas="lockward wardmap dpdpward"
+            formulas="lockward wardmap dpdpward peerward appward niyam lineward pramaan"
           else
             formulas="$FORMULA"
           fi

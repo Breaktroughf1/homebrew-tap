@@ -40,8 +40,44 @@ formula_config() {
       test_body='    assert_match "dpdpward v#{version}", shell_output("#{bin}/dpdpward version")
     assert_match "DP001", shell_output("#{bin}/dpdpward rules")'
       ;;
+    peerward)
+      repo="Breaktroughf1/peerward"
+      class="Peerward"
+      desc="Sign, verify, audit and pin A2A Agent Cards; fail CI when a peer drifts"
+      test_body='    assert_match "peerward v#{version}", shell_output("#{bin}/peerward version")
+    assert_match "PW001", shell_output("#{bin}/peerward rules")'
+      ;;
+    appward)
+      repo="Breaktroughf1/appward"
+      class="Appward"
+      desc="Find keys and backends shipped in web, Android and iOS apps and their reach"
+      test_body='    assert_match "appward v#{version}", shell_output("#{bin}/appward version")
+    assert_match "AW001", shell_output("#{bin}/appward rules")'
+      ;;
+    niyam)
+      repo="Breaktroughf1/niyam"
+      class="Niyam"
+      desc="CERT-In and SEBI CSCRF evidence scanner for cloud, hosts and repositories"
+      test_body='    assert_match "niyam v#{version}", shell_output("#{bin}/niyam version")
+    assert_match "NY-LOG-001", shell_output("#{bin}/niyam checks")'
+      ;;
+    lineward)
+      repo="Breaktroughf1/lineward"
+      class="Lineward"
+      desc="Find AI-assisted lines in a pull request and enforce human review on them"
+      test_body='    assert_match "lineward v#{version}", shell_output("#{bin}/lineward version")
+    system bin/"lineward", "init", "--policy", testpath/"lineward.json"
+    assert_path_exists testpath/"lineward.json"'
+      ;;
+    pramaan)
+      repo="Breaktroughf1/pramaan"
+      class="Pramaan"
+      desc="Second-factor verifier for Indian payment apps: attested device binding"
+      test_body='    assert_match "pramaan v#{version}", shell_output("#{bin}/pramaan version")
+    assert_match(/\A\h{64}\n\z/, shell_output("#{bin}/pramaan gen-key"))'
+      ;;
     *)
-      echo "error: unknown formula '$1' (want lockward, wardmap or dpdpward)" >&2
+      echo "error: unknown formula '$1' (want lockward, wardmap, dpdpward, peerward, appward, niyam, lineward or pramaan)" >&2
       return 1
       ;;
   esac
